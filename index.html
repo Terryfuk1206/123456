@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terry // 個人科技檔案 & 數位履歷</title>
+  <meta name="description" content="Terry 的個人數位檔案 - 科技感與流線漸層風格履歷。擅長睡覺、熱愛看影片與游泳，探索 WTF 代表作。">
+  
+  <!-- Google Fonts: Space Grotesk & Noto Sans TC & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+TC:wght@300;400;500;700;900&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       1. CSS VARIABLES & DESIGN SYSTEM (科技漸層調色盤)
+       ========================================================= */
+    :root {
+      --bg-dark: #070913;
+      --bg-card: rgba(14, 19, 36, 0.65);
+      --bg-card-hover: rgba(22, 30, 56, 0.85);
+      --border-glow: rgba(0, 245, 255, 0.2);
+      --border-glow-hover: rgba(0, 245, 255, 0.6);
+
+      /* 主要漸層配置 */
+      --grad-cyan-purple: linear-gradient(135deg, #00f2fe 0%, #4facfe 35%, #7928ca 70%, #ff0080 100%);
+      --grad-neon-fire: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
+      --grad-electric: linear-gradient(135deg, #00f5ff 0%, #0070f3 100%);
+      --grad-aurora: linear-gradient(135deg, #05d5ff 0%, #5548ff 50%, #c400ff 100%);
+      --grad-text: linear-gradient(90deg, #00f5ff, #8075ff, #ff2a85);
+
+      --color-text-main: #f0f4fc;
+      --color-text-muted: #8896b3;
+      --color-cyan: #00f5ff;
+      --color-purple: #9b51e0;
+      --color-pink: #ff2a85;
+
+      --font-display: 'Space Grotesk', -apple-system, sans-serif;
+      --font-body: 'Noto Sans TC', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+
+      --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* =========================================================
+       2. RESET & BASE STYLES
+       ========================================================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-dark);
+      color: var(--color-text-main);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      position: relative;
+      background: radial-gradient(circle at 15% 15%, rgba(0, 245, 255, 0.08) 0%, transparent 40%),
+                  radial-gradient(circle at 85% 60%, rgba(121, 40, 202, 0.12) 0%, transparent 45%),
+                  radial-gradient(circle at 50% 90%, rgba(255, 0, 128, 0.07) 0%, transparent 40%),
+                  var(--bg-dark);
+      background-attachment: fixed;
+      line-height: 1.6;
+    }
+
+    /* 科技背景網格 */
+    .cyber-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 背景動態粒子畫布 */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.7;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1180px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* =========================================================
+       3. NAVIGATION BAR
+       ========================================================= */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1.2rem 0;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(7, 9, 19, 0.75);
+      border-bottom: 1px solid rgba(0, 245, 255, 0.12);
+      transition: var(--transition-smooth);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .logo-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--grad-cyan-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 0.95rem;
+      color: #050811;
+      box-shadow: 0 0 15px rgba(0, 245, 255, 0.5);
+    }
+
+    .system-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(0, 245, 255, 0.06);
+      border: 1px solid rgba(0, 245, 255, 0.25);
+      border-radius: 20px;
+      font-family: var(--font-code);
+      font-size: 0.75rem;
+      color: var(--color-cyan);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--color-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--color-cyan);
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition-smooth);
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-cyan);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--grad-text);
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* =========================================================
+       4. HERO SECTION
+       ========================================================= */
+    .hero {
+      padding: 6rem 0 4rem;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: center;
+      gap: 3.5rem;
+      position: relative;
+    }
+
+    .hero-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(121, 40, 202, 0.15);
+      border: 1px solid rgba(121, 40, 202, 0.4);
+      border-radius: 50px;
+      font-family: var(--font-code);
+      font-size: 0.82rem;
+      color: #cd9aff;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 20px rgba(121, 40, 202, 0.2);
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 6vw, 4.8rem);
+      font-weight: 900;
+      line-height: 1.1;
+      font-family: var(--font-display);
+      margin-bottom: 1.2rem;
+      letter-spacing: -1px;
+    }
+
+    .gradient-text {
+      background: var(--grad-aurora);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+      filter: drop-shadow(0 0 25px rgba(0, 245, 255, 0.4));
+    }
+
+    .hero-quote-box {
+      position: relative;
+      background: rgba(0, 245, 255, 0.04);
+      border-left: 4px solid var(--color-cyan);
+      border-radius: 0 16px 16px 0;
+      padding: 1.2rem 1.6rem;
+      margin: 1.8rem 0 2.2rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-quote-label {
+      font-family: var(--font-code);
+      font-size: 0.75rem;
+      color: var(--color-cyan);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .hero-quote-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-quote-text .brackets {
+      color: var(--color-pink);
+      font-family: var(--font-code);
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--color-text-muted);
+      max-width: 540px;
+      margin-bottom: 2.2rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+      font-family: var(--font-display);
+    }
+
+    .btn-primary {
+      background: var(--grad-cyan-purple);
+      color: #070a14;
+      font-weight: 700;
+      box-shadow: 0 8px 25px rgba(0, 242, 254, 0.35);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(0, 242, 254, 0.55);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--color-text-main);
+      border: 1px solid rgba(0, 245, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 245, 255, 0.12);
+      border-color: var(--color-cyan);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 245, 255, 0.2);
+    }
+
+    /* 英雄區視覺外框 (全息晶片感) */
+    .hero-visual-card {
+      position: relative;
+      border-radius: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      backdrop-filter: blur(18px);
+      padding: 2.2rem;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 245, 255, 0.05);
+      overflow: hidden;
+      animation: float-anim 6s ease-in-out infinite;
+    }
+
+    @keyframes float-anim {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* 四個角的科技感標記 */
+    .tech-corner {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-color: var(--color-cyan);
+      pointer-events: none;
+    }
+    .corner-tl { top: 10px; left: 10px; border-top: 2px solid; border-left: 2px solid; }
+    .corner-tr { top: 10px; right: 10px; border-top: 2px solid; border-right: 2px solid; }
+    .corner-bl { bottom: 10px; left: 10px; border-bottom: 2px solid; border-left: 2px solid; }
+    .corner-br { bottom: 10px; right: 10px; border-bottom: 2px solid; border-right: 2px solid; }
+
+    .hologram-avatar {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1.5rem;
+      border-radius: 50%;
+      background: var(--grad-aurora);
+      padding: 3px;
+      position: relative;
+      box-shadow: 0 0 30px rgba(0, 245, 255, 0.4);
+    }
+
+    .hologram-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #0d1224;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 掃描線特效 */
+    .scan-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--color-cyan), transparent);
+      animation: scan 2.5s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes scan {
+      0% { top: -10%; }
+      100% { top: 110%; }
+    }
+
+    .hud-meta-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 1rem;
+    }
+
+    .hud-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.82rem;
+    }
+
+    .hud-label {
+      color: var(--color-text-muted);
+      font-family: var(--font-code);
+    }
+
+    .hud-val {
+      font-family: var(--font-code);
+      font-weight: 700;
+      color: var(--color-cyan);
+    }
+
+    /* =========================================================
+       5. SECTION TITLES
+       ========================================================= */
+    .section-wrap {
+      padding: 5rem 0;
+    }
+
+    .section-header {
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .section-tag {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      color: var(--color-cyan);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-family: var(--font-display);
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(0, 245, 255, 0.4), transparent);
+    }
+
+    /* =========================================================
+       6. SKILL SECTION (擅長技能：睡覺)
+       ========================================================= */
+    .skill-card-master {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      border-radius: 24px;
+      padding: 2.8rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition-smooth);
+    }
+
+    .skill-card-master:hover {
+      border-color: var(--border-glow-hover);
+      box-shadow: 0 20px 45px rgba(0, 245, 255, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .skill-card-glow {
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(121, 40, 202, 0.3) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.8rem;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .skill-title-group {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .skill-icon-box {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background: var(--grad-aurora);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 0 20px rgba(121, 40, 202, 0.4);
+    }
+
+    .skill-name {
+      font-size: 2rem;
+      font-weight: 800;
+      font-family: var(--font-display);
+    }
+
+    .skill-level-badge {
+      font-family: var(--font-code);
+      background: rgba(0, 245, 255, 0.12);
+      border: 1px solid var(--color-cyan);
+      color: var(--color-cyan);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      box-shadow: 0 0 15px rgba(0, 245, 255, 0.3);
+    }
+
+    .skill-progress-wrap {
+      margin: 1.5rem 0;
+    }
+
+    .skill-progress-bar {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .skill-progress-fill {
+      width: 100%;
+      height: 100%;
+      background: var(--grad-cyan-purple);
+      border-radius: 10px;
+      position: relative;
+      animation: progress-glow 2s infinite alternate;
+    }
+
+    @keyframes progress-glow {
+      from { filter: brightness(1); }
+      to { filter: brightness(1.3); }
+    }
+
+    .skill-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 2rem;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      padding: 1.2rem;
+      transition: var(--transition-smooth);
+    }
+
+    .stat-box:hover {
+      background: rgba(0, 245, 255, 0.06);
+      border-color: rgba(0, 245, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .stat-label {
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+
+    .stat-val {
+      font-size: 1.4rem;
+      font-weight: 700;
+      font-family: var(--font-code);
+      color: #fff;
+    }
+
+    .stat-val.highlight {
+      color: var(--color-cyan);
+      text-shadow: 0 0 10px rgba(0, 245, 255, 0.4);
+    }
+
+    /* =========================================================
+       7. INTERESTS SECTION (看影片、睡覺、游泳)
+       ========================================================= */
+    .interests-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .interest-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      border-radius: 20px;
+      padding: 2.2rem;
+      backdrop-filter: blur(16px);
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .interest-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-glow-hover);
+      transform: translateY(-8px);
+      box-shadow: 0 16px 36px rgba(0, 245, 255, 0.2);
+    }
+
+    .interest-top {
+      margin-bottom: 1.5rem;
+    }
+
+    .interest-icon-circle {
+      width: 58px;
+      height: 58px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      position: relative;
+    }
+
+    .ic-1 {
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(79, 172, 254, 0.2));
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.25);
+    }
+    .ic-2 {
+      background: linear-gradient(135deg, rgba(121, 40, 202, 0.2), rgba(255, 0, 128, 0.2));
+      box-shadow: 0 0 20px rgba(255, 0, 128, 0.25);
+    }
+    .ic-3 {
+      background: linear-gradient(135deg, rgba(0, 245, 255, 0.2), rgba(0, 112, 243, 0.2));
+      box-shadow: 0 0 20px rgba(0, 112, 243, 0.25);
+    }
+
+    .interest-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      font-family: var(--font-display);
+      margin-bottom: 0.6rem;
+    }
+
+    .interest-desc {
+      color: var(--color-text-muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .tag-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 1.4rem;
+    }
+
+    .tag-item {
+      font-family: var(--font-code);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--color-cyan);
+      border: 1px solid rgba(0, 245, 255, 0.15);
+    }
+
+    /* =========================================================
+       8. PROJECT SECTION (作品／活動：WTF)
+       ========================================================= */
+    .project-card {
+      background: linear-gradient(145deg, rgba(18, 25, 48, 0.8), rgba(10, 13, 27, 0.85));
+      border: 1px solid var(--border-glow);
+      border-radius: 26px;
+      padding: 3rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 3rem;
+      align-items: center;
+      transition: var(--transition-smooth);
+    }
+
+    .project-card:hover {
+      border-color: rgba(255, 42, 133, 0.6);
+      box-shadow: 0 25px 60px rgba(255, 42, 133, 0.25);
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--grad-aurora);
+    }
+
+    .project-meta-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.2rem;
+    }
+
+    .project-code {
+      font-family: var(--font-code);
+      font-size: 0.8rem;
+      color: var(--color-pink);
+      padding: 4px 10px;
+      background: rgba(255, 42, 133, 0.1);
+      border: 1px solid rgba(255, 42, 133, 0.3);
+      border-radius: 6px;
+    }
+
+    .project-status {
+      font-family: var(--font-code);
+      font-size: 0.78rem;
+      color: var(--color-cyan);
+    }
+
+    .project-title {
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-family: var(--font-display);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+      letter-spacing: -1px;
+    }
+
+    .project-desc {
+      color: var(--color-text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 1.8rem;
+    }
+
+    .project-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 1.2rem;
+    }
+
+    .metric-item {
+      text-align: center;
+    }
+
+    .metric-val {
+      font-family: var(--font-code);
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+
+    /* 專案右側互動視窗 / 終端機預覽 */
+    .terminal-box {
+      background: #060914;
+      border: 1px solid rgba(0, 245, 255, 0.25);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      font-family: var(--font-code);
+      overflow: hidden;
+    }
+
+    .terminal-bar {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .term-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .td-red { background: #ff5f56; }
+    .td-yellow { background: #ffbd2e; }
+    .td-green { background: #27c93f; }
+
+    .terminal-body {
+      padding: 1.5rem;
+      font-size: 0.85rem;
+      color: #9cd1ff;
+      line-height: 1.8;
+      min-height: 220px;
+    }
+
+    .term-line-cmd {
+      color: var(--color-cyan);
+    }
+    .term-line-success {
+      color: #5af78e;
+    }
+    .term-line-highlight {
+      color: #ff6ac1;
+    }
+
+    /* =========================================================
+       9. INTERACTIVE COMMAND TERMINAL (彩蛋控制台)
+       ========================================================= */
+    .easter-egg-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-top: 2rem;
+      backdrop-filter: blur(14px);
+    }
+
+    .interactive-title {
+      font-size: 1.1rem;
+      font-family: var(--font-code);
+      color: var(--color-cyan);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cmd-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .cmd-btn {
+      background: rgba(0, 245, 255, 0.08);
+      border: 1px solid rgba(0, 245, 255, 0.25);
+      color: var(--color-cyan);
+      font-family: var(--font-code);
+      font-size: 0.82rem;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .cmd-btn:hover {
+      background: var(--color-cyan);
+      color: #070913;
+      box-shadow: 0 0 15px rgba(0, 245, 255, 0.5);
+    }
+
+    .cmd-output-console {
+      background: #03060f;
+      border-radius: 10px;
+      padding: 1.2rem;
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      color: #c5d4ef;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* =========================================================
+       10. FOOTER
+       ========================================================= */
+    .footer {
+      border-top: 1px solid rgba(0, 245, 255, 0.12);
+      padding: 3rem 0;
+      margin-top: 4rem;
+      background: rgba(5, 7, 15, 0.9);
+      position: relative;
+      z-index: 2;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-text {
+      color: var(--color-text-muted);
+      font-size: 0.88rem;
+    }
+
+    .footer-badge {
+      font-family: var(--font-code);
+      font-size: 0.8rem;
+      color: var(--color-cyan);
+    }
+
+    /* =========================================================
+       11. SCROLL REVEAL ANIMATIONS (捲動淡入動畫)
+       ========================================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 錯落延遲 */
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+
+    /* =========================================================
+       12. RESPONSIVE DESIGN (手機與電腦極致適配)
+       ========================================================= */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 4rem 0 3rem;
+        gap: 2.5rem;
+        text-align: left;
+      }
+
+      .project-card {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem;
+      }
+
+      .nav-links {
+        display: none; /* 手機端精簡視覺 */
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: 92%;
+      }
+
+      .hero-title {
+        font-size: 2.8rem;
+      }
+
+      .hero-quote-text {
+        font-size: 1.4rem;
+      }
+
+      .skill-card-master {
+        padding: 1.8rem;
+      }
+
+      .project-metrics {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 背景科技網格與微粒畫布 -->
+  <div class="cyber-grid"></div>
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- 頂部導航列 -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#hero" class="brand-logo">
+        <span class="logo-badge">T</span>
+        <span>TERRY.SYS</span>
+      </a>
+
+      <div class="system-status">
+        <span class="status-dot"></span>
+        <span>STATUS: 正常運作中</span>
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#about">個人核心</a></li>
+          <li><a href="#skills">專精技能</a></li>
+          <li><a href="#interests">興趣矩陣</a></li>
+          <li><a href="#projects">旗艦作品</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 主要內容區 -->
+  <main class="container">
+
+    <!-- 1. HERO 英雄區塊 -->
+    <section id="hero" class="hero">
+      <div class="hero-content reveal">
+        <div class="hero-badge-tag">
+          <span>⚡ NEURAL PROFILE // V2.6</span>
+        </div>
+
+        <h1 class="hero-title">
+          你好，我是<br>
+          <span class="gradient-text">Terry</span>
+        </h1>
+
+        <!-- 一句話介紹自己：好棒棒 -->
+        <div class="hero-quote-box">
+          <div class="hero-quote-label">// SIGNATURE MOTTO //</div>
+          <div class="hero-quote-text">
+            <span class="brackets">[</span>
+            <span>好棒棒</span>
+            <span class="brackets">]</span>
+          </div>
+        </div>
+
+        <p class="hero-desc">
+          歡迎來到我的數位領域。這是一個融合高科技感與流動漸層美學的個人空間。
+          我專注於極致的生活平衡與深度休息，無論身處哪種維度，始終保持最佳能效。
+        </p>
+
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary">探索旗艦作品 WTF ➜</a>
+          <a href="#skills" class="btn btn-secondary">檢視核心能力</a>
+        </div>
+      </div>
+
+      <!-- 英雄區右側晶片視覺卡 -->
+      <div class="hero-visual reveal delay-1">
+        <div class="hero-visual-card">
+          <!-- 四角科技標記 -->
+          <div class="tech-corner corner-tl"></div>
+          <div class="tech-corner corner-tr"></div>
+          <div class="tech-corner corner-bl"></div>
+          <div class="tech-corner corner-br"></div>
+
+          <div class="hologram-avatar">
+            <div class="hologram-inner">
+              <span>🚀</span>
+              <div class="scan-line"></div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-bottom: 1.2rem;">
+            <h3 style="font-size: 1.4rem; font-family: var(--font-display);">Terry</h3>
+            <p style="color: var(--color-cyan); font-family: var(--font-code); font-size: 0.85rem;">LIFE ARCHITECT & VISIONARY</p>
+          </div>
+
+          <div class="hud-meta-list">
+            <div class="hud-item">
+              <span class="hud-label">CURRENT_STATE</span>
+              <span class="hud-val" style="color: #00f5ff;">100% 好棒棒</span>
+            </div>
+            <div class="hud-item">
+              <span class="hud-label">ENERGY_SAVING</span>
+              <span class="hud-val" style="color: #ff2a85;">OVERCLOCKED</span>
+            </div>
+            <div class="hud-item">
+              <span class="hud-label">FAVORITE_STYLE</span>
+              <span class="hud-val">科技感 / 漸層流</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 擅長技能 SECTION (睡覺) -->
+    <section id="skills" class="section-wrap">
+      <div class="section-header reveal">
+        <span class="section-tag">01 // CORE COMPETENCY</span>
+        <h2 class="section-title">擅長與核心技能</h2>
+      </div>
+
+      <div class="skill-card-master reveal">
+        <div class="skill-card-glow"></div>
+
+        <div class="skill-header">
+          <div class="skill-title-group">
+            <div class="skill-icon-box">💤</div>
+            <div>
+              <div class="skill-name">睡覺 (Deep Sleep Protocol)</div>
+              <p style="color: var(--color-text-muted); font-size: 0.95rem;">高階神經網絡充電模式・極限身心能效重構系統</p>
+            </div>
+          </div>
+          <div class="skill-level-badge">LEVEL: MAX // 神級專精</div>
+        </div>
+
+        <p style="color: var(--color-text-muted); line-height: 1.8;">
+          具備秒速入眠、自動濾除外界噪音、跨維度夢境構築的能力。
+          善於將日常雜訊化為寧靜白噪音，在最安穩的休息中激發最強的創造力與思維敏銳度。
+        </p>
+
+        <div class="skill-progress-wrap">
+          <div style="display: flex; justify-content: space-between; font-family: var(--font-code); font-size: 0.85rem; margin-bottom: 8px;">
+            <span style="color: var(--color-cyan);">熟練度與掌握率</span>
+            <span style="color: var(--color-pink); font-weight: bold;">100% / UNBEATABLE</span>
+          </div>
+          <div class="skill-progress-bar">
+            <div class="skill-progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="skill-stats-grid">
+          <div class="stat-box">
+            <div class="stat-label">入睡啟動速度</div>
+            <div class="stat-val highlight">&lt; 3.0s</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">抗干擾防禦係數</div>
+            <div class="stat-val highlight">99.9%</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">甦醒精神飽滿度</div>
+            <div class="stat-val highlight">SSS 級</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">好棒棒自評指數</div>
+            <div class="stat-val highlight">滿分突破</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 興趣 SECTION (看影片、睡覺、游泳) -->
+    <section id="interests" class="section-wrap">
+      <div class="section-header reveal">
+        <span class="section-tag">02 // PASSION MATRIX</span>
+        <h2 class="section-title">我的三大核心興趣</h2>
+      </div>
+
+      <div class="interests-grid">
+        <!-- 興趣 1：看影片 -->
+        <div class="interest-card reveal delay-1">
+          <div class="interest-top">
+            <div class="interest-icon-circle ic-1">🎬</div>
+            <h3 class="interest-name">看影片</h3>
+            <p class="interest-desc">
+              穿梭於海量數位串流與影音宇宙中，解析各類電影、動畫、科技解說與精采內容，迅速吸取視覺情報。
+            </p>
+          </div>
+          <div class="tag-group">
+            <span class="tag-item">#4K串流</span>
+            <span class="tag-item">#資訊流解析</span>
+            <span class="tag-item">#視覺享受</span>
+          </div>
+        </div>
+
+        <!-- 興趣 2：睡覺 -->
+        <div class="interest-card reveal delay-2">
+          <div class="interest-top">
+            <div class="interest-icon-circle ic-2">🌙</div>
+            <h3 class="interest-name">睡覺</h3>
+            <p class="interest-desc">
+              不只是專長，更是至高無上的靈魂滋養。放慢呼吸頻率，讓全身感知重置歸零，享受平靜美好的夢境世界。
+            </p>
+          </div>
+          <div class="tag-group">
+            <span class="tag-item">#極致放鬆</span>
+            <span class="tag-item">#零重力休憩</span>
+            <span class="tag-item">#能量充滿</span>
+          </div>
+        </div>
+
+        <!-- 興趣 3：游泳 -->
+        <div class="interest-card reveal delay-3">
+          <div class="interest-top">
+            <div class="interest-icon-circle ic-3">🏊‍♂️</div>
+            <h3 class="interest-name">游泳</h3>
+            <p class="interest-desc">
+              躍入水中的流體力學探索。化身流線型生物，在波瀾起伏中鍛鍊強健體魄與身心流動狀態。
+            </p>
+          </div>
+          <div class="tag-group">
+            <span class="tag-item">#水感掌控</span>
+            <span class="tag-item">#心肺協調</span>
+            <span class="tag-item">#流動狀態</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 作品／活動 SECTION (WTF) -->
+    <section id="projects" class="section-wrap">
+      <div class="section-header reveal">
+        <span class="section-tag">03 // FEATURED ARCHIVE</span>
+        <h2 class="section-title">代表作與活動紀錄</h2>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-info">
+          <div class="project-meta-top">
+            <span class="project-code">PROJECT_ID: WTF</span>
+            <span class="project-status">● DEPLOYED & CELEBRATED</span>
+          </div>
+
+          <h3 class="project-title">
+            專案代號：<span class="gradient-text">WTF</span>
+          </h3>
+
+          <p class="project-desc">
+            這是一次前所未有的突破性行動！無論是震撼全場的創意發想，還是讓人驚呼「WTF？這也太棒了吧！」的精采呈現，完整體現了 Terry 不按牌理出牌卻又極致專業的「好棒棒」風範。
+          </p>
+
+          <div class="project-metrics">
+            <div class="metric-item">
+              <div class="metric-val">999+</div>
+              <div class="metric-label">震撼與驚艷指數</div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-val">100%</div>
+              <div class="metric-label">完美達成率</div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-val">∞</div>
+              <div class="metric-label">無限擴展性</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右側模擬終端機 -->
+        <div class="terminal-box">
+          <div class="terminal-bar">
+            <span class="term-dot td-red"></span>
+            <span class="term-dot td-yellow"></span>
+            <span class="term-dot td-green"></span>
+            <span style="font-size: 0.75rem; color: #7f8c9b; margin-left: 6px;">wtf-console.log</span>
+          </div>
+          <div class="terminal-body">
+            <div>&gt; initialize project_wtf --mode=epic</div>
+            <div class="term-line-cmd">[SYS] 正在載入 Terry 的好棒棒演算法...</div>
+            <div class="term-line-success">[OK] 核心組件裝配完成 (Status: 200)</div>
+            <div>&gt; verify project_results</div>
+            <div class="term-line-highlight">&gt;&gt; 觀眾反響: "WTF! 這到底是怎麼辦到的?!"</div>
+            <div class="term-line-cmd">&gt;&gt; 結論: 無懈可擊的好棒棒之作。</div>
+            <div style="margin-top: 10px; color: #4facfe;">⚡ SYSTEM_READY: 完美運作中 _</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 互動彩蛋命令列 -->
+      <div class="easter-egg-section reveal delay-1">
+        <div class="interactive-title">
+          <span>⚡ 終端機互動彩蛋指令 (點擊執行)：</span>
+        </div>
+        <div class="cmd-buttons">
+          <button class="cmd-btn" onclick="runCommand('whoami')">$ whoami</button>
+          <button class="cmd-btn" onclick="runCommand('motto')">$ cat motto.txt</button>
+          <button class="cmd-btn" onclick="runCommand('sleep')">$ sudo sleep --forever</button>
+          <button class="cmd-btn" onclick="runCommand('wtf')">$ execute project_wtf</button>
+          <button class="cmd-btn" onclick="runCommand('clear')">$ clear</button>
+        </div>
+        <div class="cmd-output-console" id="consoleOutput">
+          &gt; 點擊上方任一指令以查看即時反饋...
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 頁尾 FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-text">
+        © 2026 <strong>Terry</strong>. All Rights Reserved. 科技感與漸層美學驅動。
+      </div>
+      <div class="footer-badge">
+        DESIGNED WITH // 好棒棒哲學 // NO FRAMEWORKS
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================
+       13. VANILLA JAVASCRIPT: 動態粒子畫布、淡入動畫、互動彩蛋
+       ========================================================= -->
+  <script>
+    // -------------------------------------------------------------
+    // 1. 捲動淡入動畫 (Intersection Observer)
+    // -------------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+      const revealElements = document.querySelectorAll('.reveal');
+
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            // 一旦觸發淡入後可取消監聽以優化性能
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      revealElements.forEach(el => revealObserver.observe(el));
+    });
+
+    // -------------------------------------------------------------
+    // 2. 科技感流動粒子背景畫布 (HTML5 Canvas)
+    // -------------------------------------------------------------
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      initParticles();
+    });
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.8;
+        this.speedX = (Math.random() - 0.5) * 0.45;
+        this.speedY = (Math.random() - 0.5) * 0.45;
+        this.color = Math.random() > 0.5 ? 'rgba(0, 245, 255,' : 'rgba(121, 40, 202,';
+        this.alpha = Math.random() * 0.5 + 0.15;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color + this.alpha + ')';
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#00f5ff';
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      const particleCount = Math.min(Math.floor(window.innerWidth / 18), 75);
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+    }
+    initParticles();
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 連接靠近的微粒營造科技星座網絡感
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 110) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(0, 245, 255, ${0.12 * (1 - dist / 110)})`;
+            ctx.lineWidth = 0.6;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // -------------------------------------------------------------
+    // 3. 終端機彩蛋指令互動功能
+    // -------------------------------------------------------------
+    const consoleOutput = document.getElementById('consoleOutput');
+
+    const commands = {
+      whoami: () => '&gt; USER: Terry | DESIGNATION: 好棒棒生活領航者 | SKILL: 睡覺LV.MAX',
+      motto: () => '&gt; 「好棒棒」—— 不是自誇，而是一種生活在漸層科技時代的極致從容。',
+      sleep: () => '&gt; [ZZZ] 系統進入深度充電模式... 心率放緩，能效最大化中... 晚安好夢！💤',
+      wtf: () => '&gt; [FIRE] 正在執行專案 WTF... 觀眾驚嘆值：99999+！太狂了！🚀',
+      clear: () => '&gt; 控制台已重置。'
+    };
+
+    function runCommand(cmd) {
+      if (commands[cmd]) {
+        consoleOutput.innerHTML = commands[cmd]();
+        consoleOutput.style.color = '#00f5ff';
+      }
+    }
+  </script>
+</body>
+</html>
